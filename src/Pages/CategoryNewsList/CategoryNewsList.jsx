@@ -46,7 +46,7 @@ const CategoryNewsList = () => {
             <div className="max-w-6xl mx-auto py-10 px-4 bg-white shadow-md rounded-lg">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold text-purple-900">{name}</h2>
-                    <Link to={`/${link}/add`} className="px-4 py-2 rounded-md bg-purple-700 text-white hover:bg-white hover:text-purple-700 border border-purple-700 transition">
+                    <Link to={`add`} className="px-4 py-2 rounded-md bg-purple-700 text-white hover:bg-white hover:text-purple-700 border border-purple-700 transition">
                         Add News
                     </Link>
                 </div>

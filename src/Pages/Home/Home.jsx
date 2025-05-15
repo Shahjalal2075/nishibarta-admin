@@ -4,19 +4,64 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
 
-    const { user} = useContext(AuthContext);
-    const [loading,setLoading]=useState(false);
+    const { user } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
 
-    const [menu, setMenu] = useState([]);
-    useEffect(() => {
-        fetch(`http://localhost:5000/admin-menu`)
-            .then(res => res.json())
-            .then(data => {
-                const sortedData = data.sort((a, b) => a.sl - b.sl);
-                setMenu(sortedData);
-                setLoading(false);
-            });
-    }, [])
+    const others = [
+        {
+            name: "All News",
+            link: ""
+        },
+        {
+            name: "All Journalist",
+            link: "journalist"
+        },
+        {
+            name: "Site Setting",
+            link: "setting"
+        },
+
+    ]
+
+    const menu =
+        [
+            {
+                name: "জাতীয়",
+                link: "national"
+            },
+            {
+                name: "যশোর",
+                link: "jashore"
+            },
+            {
+                name: "খুলনা",
+                link: "khulna"
+            },
+            {
+                name: "রাজনীতি",
+                link: "politics"
+            },
+            {
+                name: "খেলাধুলা",
+                link: "sports"
+            },
+            {
+                name: "আন্তর্জাতিক",
+                link: "international"
+            },
+            {
+                name: "বিনোদন",
+                link: "entertainment"
+            },
+            {
+                name: "চাকরি",
+                link: "job"
+            },
+            {
+                name: "অজানা",
+                link: "ojana"
+            },
+        ];
 
     if (loading) {
         return (
@@ -31,7 +76,7 @@ const Home = () => {
             <div className="grid grid-cols-3 gap-6">
                 {
                     menu.map(item =>
-                        <Link key={item.link} to={`/${item.link}`} className="bg-[#3b4aaf] rounded-xl">
+                        <Link key={item.link} to={`/news/${item.link}`} className="bg-[#3b4aaf] rounded-xl">
                             <h2 className=" text-center text-[#fff] py-6 text-3xl font-bold">{item.name}</h2>
                         </Link>)
                 }

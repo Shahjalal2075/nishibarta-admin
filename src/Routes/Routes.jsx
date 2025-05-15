@@ -19,12 +19,12 @@ const Routes = createBrowserRouter([
         element: <Home></Home>
       },
       {
-        path: "/:link",
+        path: "/news/:link",
         element: <CategoryNewsList></CategoryNewsList>,
         loader: ({ params }) => fetch(`http://localhost:5000/admin-menu/${params.link}`)
       },
       {
-        path: "/:link/add",
+        path: "/news/:link/add",
         element: <NewsAdd></NewsAdd>,
         loader: ({ params }) => fetch(`http://localhost:5000/admin-menu/${params.link}`)
       }

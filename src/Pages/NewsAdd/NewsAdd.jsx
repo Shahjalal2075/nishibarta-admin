@@ -54,7 +54,7 @@ const NewsAdd = () => {
         if (!coverFile) return;
 
         const currentDate = new Date();
-        const date = currentDate.toLocaleString();
+        const date = currentDate.toGlobalString();
         const form = e.target;
         const headline = form.headline.value;
         const category = link;
@@ -64,8 +64,8 @@ const NewsAdd = () => {
         const journalist = user.displayName;
 
         try {
-            const cover = await uploadToImgBB(coverFile);
-            const news = { category, categoryBn, date, headline, details, detailsView, cover, isTopHead, isTopNews, journalist };
+            //const cover = await uploadToImgBB(coverFile);
+            const news = { category, categoryBn, date, headline, details, cover:"", isTopHead, isTopNews, journalist };
             console.log(news);
             toast.success("News added successfully!");
         } catch (error) {
