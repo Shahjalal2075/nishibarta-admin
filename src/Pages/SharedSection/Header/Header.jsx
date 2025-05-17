@@ -6,6 +6,8 @@ import { AuthContext } from "../../../Providers/AuthProvider";
 import { Link } from "react-router-dom";
 
 const Header = () => {
+    ;
+
     const currentDate = new Date();
 
     const weekNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -16,7 +18,7 @@ const Header = () => {
     const date = currentDate.getDate();
     const year = currentDate.getFullYear();
 
-    const { user, signOutUser } = useContext(AuthContext);
+    const { userDetails, signOutUser } = useContext(AuthContext);
 
     const [isBtn, setIsBtn] = useState(true);
 
@@ -56,11 +58,11 @@ const Header = () => {
             <div className="flex gap-4 items-center">
                 <button className="ml-4" onClick={handleLogOutToggle}>
                     {
-                        <img className="mask mask-circle w-10" src="https://i.ibb.co/0rcvLrD/users.png" />
+                        <img className="rounded-full w-12 md:w-14 lg:w-16" src={userDetails.profile} />
                     }
                 </button>
                 {
-                    isBtn ? <p className="text-[#fff] font-medium">Shahjalal</p> : <button className="font-bold text-[#fff]" onClick={handleLogOut}>Logout</button>
+                    isBtn ? <p className="text-[#fff] font-medium">{userDetails.username}</p> : <button className="font-bold text-[#fff]" onClick={handleLogOut}>Logout</button>
                 }
             </div>
 
