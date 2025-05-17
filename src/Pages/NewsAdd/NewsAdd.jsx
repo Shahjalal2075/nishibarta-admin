@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContext } from "../../Providers/AuthProvider";
 
 const NewsAdd = () => {
-    const { user } = useContext(AuthContext);
+    const { userDetails } = useContext(AuthContext);
     const menu = useLoaderData();
     const { name, link } = menu;
 
@@ -13,6 +13,8 @@ const NewsAdd = () => {
     const [detailsView, setDetailsView] = useState("");
     const [coverFile, setCoverFile] = useState(null);
     const [coverPreview, setCoverPreview] = useState(null);
+
+    const navigate = useNavigate();
 
     const handleDetailsChange = (e) => {
         const value = e.target.value;
@@ -36,7 +38,7 @@ const NewsAdd = () => {
         const formData = new FormData();
         formData.append('image', file);
 
-        const response = await fetch(`https://api.imgbb.com/1/upload?key=fd17c529f0340228187c8df57c534dea`, {
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=abbd3168fe4bef8335f1b5da9bf4eb5e`, {
             method: 'POST',
             body: formData
         });
@@ -52,25 +54,49 @@ const NewsAdd = () => {
     const handleAddProduct = async (e) => {
         e.preventDefault();
         if (!coverFile) return;
-
-        const currentDate = new Date();
-        const date = currentDate.toGlobalString();
         const form = e.target;
-        const headline = form.headline.value;
-        const category = link;
-        const categoryBn = name;
-        const isTopHead = false;
-        const isTopNews = false;
-        const journalist = user.displayName;
 
         try {
-            //const cover = await uploadToImgBB(coverFile);
-            const news = { category, categoryBn, date, headline, details, cover:"", isTopHead, isTopNews, journalist };
-            console.log(news);
-            toast.success("News added successfully!");
+            const url = await uploadToImgBB(coverFile);
+            const news = {
+                category: link,
+                categoryBn: name,
+                date: new Date().toISOString(),
+                headline: form.headline.value,
+                details: details,
+                detailsView: detailsView,
+                cover: url,
+                isTopHead: false,
+                isTopNews: false,
+                journalist: userDetails.username,
+                status: "Pending",
+                operationBy: "",
+                operationTime: "",
+                deleteStatus: "None",
+                deletedBy: "",
+                deletedTime: "",
+            };
+
+            const res = await fetch("http://localhost:5000/news", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(news)
+            });
+
+            if (res.ok) {
+                toast.success("News added successfully!");
+                setTimeout(() => {
+                    navigate("/");
+                }, 1500);
+            } else {
+                toast.error("Failed to add news to server");
+            }
+
         } catch (error) {
-            console.error("Image upload failed", error);
-            toast.error("Failed to upload image");
+            console.error("Error adding news:", error);
+            toast.error("An error occurred while adding news");
         }
     };
 

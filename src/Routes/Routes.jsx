@@ -7,6 +7,12 @@ import CategoryNewsList from "../Pages/CategoryNewsList/CategoryNewsList";
 import NewsAdd from "../Pages/NewsAdd/NewsAdd";
 import Login from "../Pages/Login/Login";
 import CheckRoute from "./CheckRoute";
+import Journalists from "../Pages/Journalists/Journalists";
+import AllNews from "../Pages/AllNews/AllNews";
+import PendingNews from "../Pages/PendingNews/PendingNews";
+import ApprovedNews from "../Pages/ApprovedNews/ApprovedNews";
+import RejectedNews from "../Pages/RejectedNews/RejectedNews";
+import DeletedNews from "../Pages/DeletedNews/DeletedNews";
 
 const Routes = createBrowserRouter([
   {
@@ -17,6 +23,30 @@ const Routes = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>
+      },
+      {
+        path: "/journalist",
+        element: <Journalists></Journalists>
+      },
+      {
+        path: "/all-news",
+        element: <AllNews></AllNews>
+      },
+      {
+        path: "/deleted-news",
+        element: <DeletedNews></DeletedNews>
+      },
+      {
+        path: "/pending-news",
+        element: <PendingNews></PendingNews>
+      },
+      {
+        path: "/approved-news",
+        element: <ApprovedNews></ApprovedNews>
+      },
+      {
+        path: "/rejected-news",
+        element: <RejectedNews></RejectedNews>
       },
       {
         path: "/news/:link",
@@ -31,8 +61,8 @@ const Routes = createBrowserRouter([
     ]
   },
   {
-     path: "/login",
-        element: <CheckRoute><Login></Login></CheckRoute>
+    path: "/login",
+    element: <CheckRoute><Login></Login></CheckRoute>
   }
 ]);
 

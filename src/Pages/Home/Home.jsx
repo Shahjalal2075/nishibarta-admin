@@ -23,6 +23,36 @@ const Home = () => {
 
     ]
 
+    const menuSA = [
+        {
+            name: "All Journalist",
+            link: "journalist"
+        },
+        {
+            name: "All News",
+            link: "all-news"
+        },
+        {
+            name: "Deleted News",
+            link: "deleted-news"
+        },
+    ]
+
+    const menuM = [
+        {
+            name: "Approved News",
+            link: "approved-news"
+        },
+        {
+            name: "Pending News",
+            link: "pending-news"
+        },
+        {
+            name: "Rejected News",
+            link: "rejected-news"
+        },
+    ]
+
     const menu =
         [
             {
@@ -74,6 +104,18 @@ const Home = () => {
     return (
         <div className="pt-14">
             <div className="grid grid-cols-3 gap-6">
+                {
+                    menuSA.map(item =>
+                        <Link key={item.link} to={`/${item.link}`} className="bg-[#3b4aaf] rounded-xl">
+                            <h2 className=" text-center text-[#fff] py-6 text-3xl font-bold">{item.name}</h2>
+                        </Link>)
+                }
+                {
+                    menuM.map(item =>
+                        <Link key={item.link} to={`/${item.link}`} className="bg-[#3b4aaf] rounded-xl">
+                            <h2 className=" text-center text-[#fff] py-6 text-3xl font-bold">{item.name}</h2>
+                        </Link>)
+                }
                 {
                     menu.map(item =>
                         <Link key={item.link} to={`/news/${item.link}`} className="bg-[#3b4aaf] rounded-xl">
