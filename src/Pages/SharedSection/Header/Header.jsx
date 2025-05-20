@@ -62,7 +62,7 @@ const Header = () => {
                     }
                 </button>
                 {
-                    isBtn ? <p className="text-[#fff] font-medium">{userDetails.username}</p> : <button className="font-bold text-[#fff]" onClick={handleLogOut}>Logout</button>
+                    isBtn ? <p className="text-[#fff] font-medium">{userDetails.username}</p> : <button className="font-bold text-[#ffffff]" onClick={handleLogOut}>Logout</button>
                 }
             </div>
 
