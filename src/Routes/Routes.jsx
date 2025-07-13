@@ -13,6 +13,7 @@ import PendingNews from "../Pages/PendingNews/PendingNews";
 import ApprovedNews from "../Pages/ApprovedNews/ApprovedNews";
 import RejectedNews from "../Pages/RejectedNews/RejectedNews";
 import DeletedNews from "../Pages/DeletedNews/DeletedNews";
+import NewsEdit from "../Pages/NewsEdit/NewsEdit";
 
 const Routes = createBrowserRouter([
   {
@@ -51,13 +52,18 @@ const Routes = createBrowserRouter([
       {
         path: "/news/:link",
         element: <CategoryNewsList></CategoryNewsList>,
-        loader: ({ params }) => fetch(`http://localhost:5000/admin-menu/${params.link}`)
+        loader: ({ params }) => fetch(`https://nishibarta-server.vercel.app/admin-menu/${params.link}`)
       },
       {
         path: "/news/:link/add",
         element: <NewsAdd></NewsAdd>,
-        loader: ({ params }) => fetch(`http://localhost:5000/admin-menu/${params.link}`)
-      }
+        loader: ({ params }) => fetch(`https://nishibarta-server.vercel.app/admin-menu/${params.link}`)
+      },/* 
+      {
+        path: "/news/:link/edit",
+        element: <NewsEdit></NewsEdit>,
+        loader: ({ params }) => fetch(`https://nishibarta-server.vercel.app/admin-menu/${params.link}`)
+      } */
     ]
   },
   {

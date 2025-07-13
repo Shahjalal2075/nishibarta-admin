@@ -37,11 +37,10 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
-            setLoading(false);
 
             if (currentUser && currentUser.email) {
                 try {
-                    const res = await fetch(`http://localhost:5000/user-details/${currentUser.email}`);
+                    const res = await fetch(`https://nishibarta-server.vercel.app/user-details/${currentUser.email}`);
                     const data = await res.json();
                     setUserDetails(data);
                 } catch (error) {
@@ -51,6 +50,8 @@ const AuthProvider = ({ children }) => {
             } else {
                 setUserDetails(null);
             }
+
+            setLoading(false);
         });
 
         return () => unSubscribe();

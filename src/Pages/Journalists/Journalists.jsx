@@ -40,7 +40,7 @@ const Journalists = () => {
 
     // Fetch journalists
     useEffect(() => {
-        fetch('http://localhost:5000/user-list')
+        fetch('https://nishibarta-server.vercel.app/user-list')
             .then(res => res.json())
             .then(data => {
                 setJournalists(data);
@@ -132,7 +132,7 @@ const Journalists = () => {
         };
 
         try {
-            const res = await fetch('http://localhost:5000/user-list', {
+            const res = await fetch('https://nishibarta-server.vercel.app/user-list', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newJournalist),
@@ -141,7 +141,7 @@ const Journalists = () => {
             if (res.ok) {
                 alert('✅ Journalist added successfully!');
                 setShowModal(false);
-                const updated = await fetch('http://localhost:5000/user-list').then(res => res.json());
+                const updated = await fetch('https://nishibarta-server.vercel.app/user-list').then(res => res.json());
                 setJournalists(updated);
                 setFiltered(updated);
             } else {

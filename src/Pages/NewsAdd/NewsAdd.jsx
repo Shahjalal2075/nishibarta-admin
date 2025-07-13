@@ -68,7 +68,7 @@ const NewsAdd = () => {
                 cover: url,
                 isTopHead: false,
                 isTopNews: false,
-                journalist: userDetails.username,
+                journalist: userDetails.idNo,
                 status: "Pending",
                 operationBy: "",
                 operationTime: "",
@@ -77,7 +77,7 @@ const NewsAdd = () => {
                 deletedTime: "",
             };
 
-            const res = await fetch("http://localhost:5000/news", {
+            const res = await fetch("https://nishibarta-server.vercel.app/news", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
