@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { AuthContext } from '../../Providers/AuthProvider';
 
 const AllNews = () => {
+  const { userDetails } = useContext(AuthContext);
+
   const [loading, setLoading] = useState(true);
   const [news, setNews] = useState([]);
   const [filteredNews, setFilteredNews] = useState([]);
@@ -94,6 +97,14 @@ const AllNews = () => {
   const categories = [...new Set(news.map(n => n.category))];
   const statuses = [...new Set(news.map(n => n.status))];
 
+  if (userDetails?.role !== 'Admin') {
+    return (
+      <div className="flex justify-center items-center h-[300px]">
+        <h2 className="text-2xl font-bold text-red-500">Access Denied</h2>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-[300px]">
@@ -107,23 +118,23 @@ const AllNews = () => {
       <h2 className="text-xl font-bold mb-4">All News</h2>
 
       {/* Search Section */}
-      <div className="flex gap-4 mb-4 flex-wrap">
+      <div className="flex flex-wrap gap-3 mb-4">
         <input
           type="text"
           placeholder="Search Headline"
-          className="border p-2"
+          className="border p-2 flex-1 min-w-[180px]"
           value={search.headline}
           onChange={e => setSearch({ ...search, headline: e.target.value })}
         />
         <input
           type="text"
           placeholder="Search Journalist"
-          className="border p-2"
+          className="border p-2 flex-1 min-w-[180px]"
           value={search.journalist}
           onChange={e => setSearch({ ...search, journalist: e.target.value })}
         />
         <select
-          className="border p-2"
+          className="border p-2 flex-1 min-w-[150px]"
           value={search.category}
           onChange={e => setSearch({ ...search, category: e.target.value })}
         >
@@ -133,7 +144,7 @@ const AllNews = () => {
           ))}
         </select>
         <select
-          className="border p-2"
+          className="border p-2 flex-1 min-w-[150px]"
           value={search.status}
           onChange={e => setSearch({ ...search, status: e.target.value })}
         >
@@ -146,8 +157,8 @@ const AllNews = () => {
         <button onClick={handleReset} className="bg-gray-500 text-white px-4 py-2 rounded">Reset</button>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
+      {/* Desktop Table */}
+      <div className="overflow-x-auto hidden md:block">
         <table className="w-full border">
           <thead className="bg-gray-100">
             <tr>
@@ -171,14 +182,8 @@ const AllNews = () => {
                 <td className="border p-2">{item.status}</td>
                 <td className="border p-2">
                   <div className="flex justify-between gap-1">
-                    <button
-                      onClick={() => handleEditClick(item)}
-                      className="bg-[#0c87b8] text-white px-4 py-1 rounded"
-                    >Edit</button>
-                    <button
-                      onClick={() => setViewModalData(item)}
-                      className="bg-green-500 text-white px-3 py-1 rounded"
-                    >View</button>
+                    <button onClick={() => handleEditClick(item)} className="bg-[#0c87b8] text-white px-4 py-1 rounded">Edit</button>
+                    <button onClick={() => setViewModalData(item)} className="bg-green-500 text-white px-3 py-1 rounded">View</button>
                   </div>
                 </td>
               </tr>
@@ -190,15 +195,37 @@ const AllNews = () => {
         </table>
       </div>
 
+      {/* Mobile Card List */}
+      <div className="space-y-4 md:hidden">
+        {filteredNews.map(item => (
+          <div key={item._id} className="border border-gray-200 rounded p-3 shadow">
+            <img src={item.cover} alt="cover" className="w-full h-40 object-cover rounded mb-2" />
+            <h3 className="font-bold text-lg">{item.headline}</h3>
+            <p className="text-sm text-gray-600">Date: {new Date(item.date).toLocaleDateString()}</p>
+            <p className="text-sm">Category: {item.categoryBn}</p>
+            <p className="text-sm">Journalist: {item.journalist || 'N/A'}</p>
+            <p className="text-sm">Status: {item.status}</p>
+            <div className="flex gap-2 mt-2">
+              <button onClick={() => handleEditClick(item)} className="flex-1 bg-[#0c87b8] text-white py-1 rounded">Edit</button>
+              <button onClick={() => setViewModalData(item)} className="flex-1 bg-green-500 text-white py-1 rounded">View</button>
+            </div>
+          </div>
+        ))}
+        {filteredNews.length === 0 && (
+          <p className="text-center py-4">No data found</p>
+        )}
+      </div>
+
+      {/* Modals remain as-is */}
       {/* View Modal */}
       {viewModalData && (
         <div className="fixed inset-0 bg-[#111c] flex justify-center items-center z-50">
-          <div className="bg-white rounded p-6 w-full max-w-3xl max-h-[calc(100vh-100px)] overflow-y-auto relative mx-[50px] my-[50px]">
+          <div className="bg-white rounded p-6 w-full max-w-3xl max-h-[calc(100vh-80px)] overflow-y-auto relative mx-3 my-6">
             <button className="absolute top-2 right-2 text-xl font-bold" onClick={() => setViewModalData(null)}>&times;</button>
             <img src={viewModalData.cover} alt="cover" className="w-full mb-4 rounded" />
             <h3 className="text-xl font-bold mb-2">{viewModalData.headline}</h3>
             {viewModalData.details.split('/n').map((para, index) => (
-              <p key={index} className="whitespace-pre-line text-justify ">{para.trim()}</p>
+              <p key={index} className="whitespace-pre-line text-justify">{para.trim()}</p>
             ))}
           </div>
         </div>
@@ -207,53 +234,18 @@ const AllNews = () => {
       {/* Edit Modal */}
       {editModalData && (
         <div className="fixed inset-0 bg-[#111c] flex justify-center items-center z-50">
-          <div className="bg-white rounded p-6 w-full max-w-2xl max-h-[calc(100vh-100px)] overflow-y-auto relative mx-[50px] my-[50px]">
+          <div className="bg-white rounded p-6 w-full max-w-2xl max-h-[calc(100vh-80px)] overflow-y-auto relative mx-3 my-6">
             <button className="absolute top-2 right-2 text-xl font-bold" onClick={() => setEditModalData(null)}>&times;</button>
             <h3 className="text-xl font-bold mb-4">Edit News</h3>
             <div className="space-y-4">
-              <input
-                type="date"
-                className="w-full border p-2"
-                value={editForm.date}
-                onChange={e => setEditForm({ ...editForm, date: e.target.value })}
-              />
-              <input
-                type="text"
-                className="w-full border p-2"
-                placeholder="Headline"
-                value={editForm.headline}
-                onChange={e => setEditForm({ ...editForm, headline: e.target.value })}
-              />
-              <input
-                type="text"
-                className="w-full border p-2"
-                placeholder="Journalist"
-                value={editForm.journalist}
-                onChange={e => setEditForm({ ...editForm, journalist: e.target.value })}
-              />
-              <textarea
-                rows="6"
-                className="w-full border p-2"
-                placeholder="Details"
-                value={editForm.details}
-                onChange={e => setEditForm({ ...editForm, details: e.target.value })}
-              />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="border p-2 w-full"
-              />
+              <input type="date" className="w-full border p-2" value={editForm.date} onChange={e => setEditForm({ ...editForm, date: e.target.value })} />
+              <input type="text" className="w-full border p-2" placeholder="Headline" value={editForm.headline} onChange={e => setEditForm({ ...editForm, headline: e.target.value })} />
+              <input type="text" className="w-full border p-2" placeholder="Journalist" value={editForm.journalist} onChange={e => setEditForm({ ...editForm, journalist: e.target.value })} />
+              <textarea rows="6" className="w-full border p-2" placeholder="Details" value={editForm.details} onChange={e => setEditForm({ ...editForm, details: e.target.value })} />
+              <input type="file" accept="image/*" onChange={handleImageUpload} className="border p-2 w-full" />
               {uploading && <p className="text-blue-500 text-sm">Uploading...</p>}
-              {editForm.cover && (
-                <img src={editForm.cover} alt="Preview" className="w-full h-48 object-cover mt-2 rounded" />
-              )}
-              <button
-                onClick={handleEditSubmit}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-              >
-                Save
-              </button>
+              {editForm.cover && <img src={editForm.cover} alt="Preview" className="w-full h-48 object-cover mt-2 rounded" />}
+              <button onClick={handleEditSubmit} className="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
             </div>
           </div>
         </div>

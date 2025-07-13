@@ -4,8 +4,8 @@ import Header from "../Pages/SharedSection/Header/Header";
 const Root = () => {
 
     return (
-        <div className="bg-[#fff]">
-            <div className="container mx-auto">
+        <div className="bg-[#fff] overflow-hidden">
+            <div className="container mx-auto px-4 lg:px-0">
                 <Header></Header>
                 <Outlet></Outlet>
             </div>

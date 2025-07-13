@@ -21,7 +21,6 @@ const DeletedNews = () => {
             });
     }, []);
 
-
     const handleStatusAction = (id) => {
         Swal.fire({
             title: 'Update Status',
@@ -47,9 +46,9 @@ const DeletedNews = () => {
                         await axios.patch(`https://nishibarta-server.vercel.app/delete-news/${id}`, { deleteStatus: 'None', deletedBy: userDetails.username, deletedTime: new Date().toISOString() });
                         setNews(prev => prev.filter(item => item._id !== id));
                         Swal.fire({
-                            icon: selected === 'Restore' ? 'success' : 'error',
-                            title: selected === 'Restore' ? 'Restored!' : 'Rejected!',
-                            text: `The news has been ${selected.toLowerCase()}.`,
+                            icon: 'success',
+                            title: 'Restored!',
+                            text: `The news has been restored.`,
                             timer: 1500,
                             showConfirmButton: false
                         });
@@ -61,6 +60,14 @@ const DeletedNews = () => {
         });
     };
 
+    if (userDetails?.role !== 'Admin') {
+        return (
+            <div className="flex justify-center items-center h-[300px]">
+                <h2 className="text-2xl font-bold text-red-500">Access Denied</h2>
+            </div>
+        );
+    }
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-[300px]">
@@ -71,10 +78,10 @@ const DeletedNews = () => {
 
     return (
         <div className="p-4">
-            <h2 className="text-xl font-bold mb-4">Pending News</h2>
+            <h2 className="text-xl font-bold mb-4">Deleted News</h2>
 
-            {/* Table */}
-            <div className="overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
                 <table className="w-full border text-center">
                     <thead className="bg-gray-100">
                         <tr>
@@ -122,6 +129,36 @@ const DeletedNews = () => {
                 </table>
             </div>
 
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-4">
+                {news.map(item => (
+                    <div key={item._id} className="border rounded p-4 shadow">
+                        <img src={item.cover} alt="cover" className="w-full h-40 object-cover rounded mb-2" />
+                        <h3 className="text-lg font-bold mb-1">{item.headline}</h3>
+                        <p><strong>Category:</strong> {item.categoryBn}</p>
+                        <p><strong>Date:</strong> {new Date(item.date).toLocaleDateString()}</p>
+                        <p><strong>Journalist:</strong> {item.journalist || 'N/A'}</p>
+                        <div className="flex gap-2 mt-3">
+                            <button
+                                onClick={() => handleStatusAction(item._id)}
+                                className="flex-1 bg-red-400 text-white px-3 py-1 rounded font-semibold"
+                            >
+                                Deleted
+                            </button>
+                            <button
+                                onClick={() => setModalData(item)}
+                                className="flex-1 bg-green-500 text-white px-3 py-1 rounded"
+                            >
+                                View
+                            </button>
+                        </div>
+                    </div>
+                ))}
+                {news.length === 0 && (
+                    <p className="text-center py-4">No news</p>
+                )}
+            </div>
+
             {/* Modal */}
             {modalData && (
                 <div className="fixed inset-0 bg-[#111c] flex justify-center items-center z-50">
@@ -135,7 +172,7 @@ const DeletedNews = () => {
                         <img src={modalData.cover} alt="cover" className="w-full mb-4 rounded" />
                         <h3 className="text-xl font-bold mb-2">{modalData.headline}</h3>
                         {modalData.details.split('/n').map((para, index) => (
-                            <p key={index} className="whitespace-pre-line text-justify ">{para.trim()}</p>
+                            <p key={index} className="whitespace-pre-line text-justify">{para.trim()}</p>
                         ))}
                     </div>
                 </div>

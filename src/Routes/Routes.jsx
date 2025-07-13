@@ -34,16 +34,16 @@ const Routes = createBrowserRouter([
         element: <AllNews></AllNews>
       },
       {
+        path: "/approved-news",
+        element: <ApprovedNews></ApprovedNews>
+      },
+      {
         path: "/deleted-news",
         element: <DeletedNews></DeletedNews>
       },
       {
         path: "/pending-news",
         element: <PendingNews></PendingNews>
-      },
-      {
-        path: "/approved-news",
-        element: <ApprovedNews></ApprovedNews>
       },
       {
         path: "/rejected-news",

@@ -37,7 +37,7 @@ const Login = () => {
     }
 
     return (
-        <div className=" bg-[#eee] pb-28">
+        <div className=" bg-[#eee] pb-28 h-[100vh] overflow-hidden">
             <div className="container mx-auto">
                 <div className="grid grid-cols-1">
 
@@ -50,9 +50,9 @@ const Login = () => {
 
                         <div className="flex flex-col justify-center items-center">
                             <form onSubmit={handleLogin} className="flex flex-col justify-center items-center" action="">
-                                <input className="bg-[#fff] border px-6 py-1 text-lg text-black rounded-2xl mt-4 w-80" placeholder="Enter Email" type="email" name="email" required />
-                                <input className="bg-[#fff] border px-6 py-1 text-lg text-black rounded-2xl mt-4 w-80" placeholder="Enter Password" type="password" name="password" required />
-                                <input className=" cursor-pointer bg-[#017EFF] text-lg rounded-2xl mt-4 text-white px-2 py-1 font-semibold mb-4 w-80" type="submit" value={"Login"} />
+                                <input className="bg-[#fff] border px-6 py-1 text-lg text-black rounded-2xl mt-4 md:w-80" placeholder="Enter Email" type="email" name="email" required />
+                                <input className="bg-[#fff] border px-6 py-1 text-lg text-black rounded-2xl mt-4 md:w-80" placeholder="Enter Password" type="password" name="password" required />
+                                <input className=" cursor-pointer bg-[#017EFF] text-lg rounded-2xl mt-4 text-white px-2 py-1 font-semibold mb-4 md:w-80 w-full" type="submit" value={"Login"} />
                             </form>
                         </div>
 

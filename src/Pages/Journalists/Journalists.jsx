@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { TiPlus } from 'react-icons/ti';
 import JournalistCard from '../SharedSection/JournalistCard/JournalistCard';
+import { AuthContext } from '../../Providers/AuthProvider';
 
 const Journalists = () => {
+    const { userDetails } = useContext(AuthContext);
+
     const [journalists, setJournalists] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -152,10 +155,18 @@ const Journalists = () => {
         }
     };
 
+    if (userDetails?.role !== 'Admin') {
+        return (
+            <div className="flex justify-center items-center h-[300px]">
+                <h2 className="text-2xl font-bold text-red-500">Access Denied</h2>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-tr from-blue-50 via-white to-pink-50 p-6">
-            <div className="flex items-center justify-between mb-6">
-                <h2 className="text-3xl font-bold text-gray-800">📋 Journalist Directory</h2>
+            <div className="flex items-center justify-between mb-6 flex-col md:flex-row gap-6 md:gap-0">
+                <h2 className="lg:text-3xl md:text-2xl text-xl font-bold text-gray-800 text-center md:text-start">📋 Journalist Directory</h2>
                 <button
                     className="flex gap-1 items-center bg-gradient-to-r from-[#3b4aaf] to-[#3b4aaf] text-white px-4 py-2 rounded-lg text-base font-medium shadow hover:opacity-90 transition"
                     onClick={() => {

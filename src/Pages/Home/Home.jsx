@@ -3,95 +3,34 @@ import { AuthContext } from '../../Providers/AuthProvider';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
-
-    const { user } = useContext(AuthContext);
+    const { userDetails } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
 
-    const others = [
-        {
-            name: "All News",
-            link: ""
-        },
-        {
-            name: "All Journalist",
-            link: "journalist"
-        },
-        {
-            name: "Site Setting",
-            link: "setting"
-        },
-
-    ]
+    console.log(userDetails);
 
     const menuSA = [
-        {
-            name: "All Journalist",
-            link: "journalist"
-        },
-        {
-            name: "All News",
-            link: "all-news"
-        },
-        {
-            name: "Deleted News",
-            link: "deleted-news"
-        },
-    ]
+        { name: "All Journalist", link: "journalist" },
+        { name: "All News", link: "all-news" },
+        { name: "Deleted News", link: "deleted-news" },
+    ];
 
     const menuM = [
-        {
-            name: "Approved News",
-            link: "approved-news"
-        },
-        {
-            name: "Pending News",
-            link: "pending-news"
-        },
-        {
-            name: "Rejected News",
-            link: "rejected-news"
-        },
-    ]
+        { name: "Approved News", link: "approved-news" },
+        { name: "Pending News", link: "pending-news" },
+        { name: "Rejected News", link: "rejected-news" },
+    ];
 
-    const menu =
-        [
-            {
-                name: "জাতীয়",
-                link: "national"
-            },
-            {
-                name: "যশোর",
-                link: "jashore"
-            },
-            {
-                name: "খুলনা",
-                link: "khulna"
-            },
-            {
-                name: "রাজনীতি",
-                link: "politics"
-            },
-            {
-                name: "খেলাধুলা",
-                link: "sports"
-            },
-            {
-                name: "আন্তর্জাতিক",
-                link: "international"
-            },
-            {
-                name: "বিনোদন",
-                link: "entertainment"
-            },
-            {
-                name: "চাকরি",
-                link: "job"
-            },
-            {
-                name: "অজানা",
-                link: "ojana"
-            },
-        ];
+    const menu = [
+        { name: "জাতীয়", link: "national" },
+        { name: "যশোর", link: "jashore" },
+        { name: "খুলনা", link: "khulna" },
+        { name: "রাজনীতি", link: "politics" },
+        { name: "খেলাধুলা", link: "sports" },
+        { name: "আন্তর্জাতিক", link: "international" },
+        { name: "বিনোদন", link: "entertainment" },
+        { name: "চাকরি", link: "job" },
+        { name: "অজানা", link: "ojana" },
+    ];
 
     if (loading) {
         return (
@@ -101,28 +40,32 @@ const Home = () => {
         );
     }
 
-    return (
-        <div className="pt-14">
-            <div className="grid grid-cols-3 gap-6">
-                {
-                    menuSA.map(item =>
-                        <Link key={item.link} to={`/${item.link}`} className="bg-[#3b4aaf] rounded-xl">
-                            <h2 className=" text-center text-[#fff] py-6 text-3xl font-bold">{item.name}</h2>
-                        </Link>)
-                }
-                {
-                    menuM.map(item =>
-                        <Link key={item.link} to={`/${item.link}`} className="bg-[#3b4aaf] rounded-xl">
-                            <h2 className=" text-center text-[#fff] py-6 text-3xl font-bold">{item.name}</h2>
-                        </Link>)
-                }
-                {
-                    menu.map(item =>
-                        <Link key={item.link} to={`/news/${item.link}`} className="bg-[#3b4aaf] rounded-xl">
-                            <h2 className=" text-center text-[#fff] py-6 text-3xl font-bold">{item.name}</h2>
-                        </Link>)
-                }
+    const getVisibleMenus = () => {
+        if (!userDetails?.role) return [];
 
+        if (userDetails.role === 'Agent') {
+            return [...menu];
+        } else if (userDetails.role === 'Moderator') {
+            return [...menuM, ...menu];
+        } else if (userDetails.role === 'Admin') {
+            return [...menuSA, ...menuM, ...menu];
+        } else {
+            return [];
+        }
+    };
+
+    const visibleMenus = getVisibleMenus();
+
+    return (
+        <div className="py-14">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {
+                    visibleMenus.map(item =>
+                        <Link key={item.link} to={`/${item.link}`} className="bg-[#3b4aaf] rounded-xl">
+                            <h2 className="text-center text-[#fff] py-6 text-3xl font-bold">{item.name}</h2>
+                        </Link>
+                    )
+                }
             </div>
         </div>
     );

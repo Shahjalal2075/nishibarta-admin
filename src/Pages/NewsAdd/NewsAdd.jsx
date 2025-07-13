@@ -102,7 +102,7 @@ const NewsAdd = () => {
 
     return (
         <div className="bg-gray-100 pt-10 min-h-screen">
-            <form onSubmit={handleAddProduct} className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+            <form onSubmit={handleAddProduct} className="max-w-4xl mx-auto bg-white p-4 lg:p-8 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold text-purple-900 mb-6">{name}</h2>
 
                 <div className="mb-4">
